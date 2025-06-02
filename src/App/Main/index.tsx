@@ -1,10 +1,10 @@
-const Main = () => {
-  return (
-    <div>
-      <h1>Main Component</h1>
-      {/* Add your main component content here */}
-    </div>
-  );
-};
+import { Box } from '@mui/material';
+import List from '@App/List';
+
+const Main = () => (
+  <Box padding={2}>
+    <List />
+  </Box>
+);
 
 export default Main;

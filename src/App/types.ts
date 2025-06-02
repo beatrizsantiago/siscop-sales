@@ -1,0 +1,22 @@
+import { DocumentSnapshot } from 'firebase/firestore';
+import Sale from '@domain/entities/Sale';
+
+export type State = {
+  list: Sale[],
+  lastDoc?: DocumentSnapshot;
+  hasMore: boolean;
+  loading: boolean,
+};
+
+export type ActionType = { type: 'SET_SALES', list: Sale[], lastDoc?: DocumentSnapshot | null, hasMore: boolean }
+| { type: 'SET_LOADING', loading: boolean };
+
+export type SaleProviderType = {
+  state: State,
+  dispatch: React.Dispatch<ActionType>,
+  getMoreSale: () => Promise<void>,
+};
+
+export type SaleProviderProps = {
+  children: React.ReactNode,
+};
