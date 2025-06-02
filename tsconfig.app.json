@@ -31,6 +31,8 @@
       "@utils/*": ["./src/utils/*"],
       "@App/*": ["./src/App/*"],
       "@fb/*": ["./src/firebase/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@components/*": ["./src/components/*"],
     }
   },
   "include": ["src"]
