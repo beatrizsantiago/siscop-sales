@@ -17,6 +17,12 @@ const reducer = (state: State, action: ActionType):State => {
         loading: action.loading,
       };
 
+    case 'ADD_SALE':
+      return {
+        ...state,
+        list: [action.item, ...state.list],
+      };
+
     default:
       throw new Error('Unhandled action');
   }

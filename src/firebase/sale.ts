@@ -1,7 +1,7 @@
 import { SaleRepository } from '@domain/repositories/SaleRepository';
 import {
-  collection, DocumentReference, DocumentSnapshot,
-  getDoc, getDocs, limit, orderBy, query, startAfter,
+  addDoc, collection, doc, DocumentReference, DocumentSnapshot,
+  getDoc, getDocs, limit, orderBy, query, startAfter,  Timestamp,
 } from 'firebase/firestore';
 import Sale from '@domain/entities/Sale';
 import Product from '@domain/entities/Product';
@@ -12,6 +12,25 @@ import { firestore } from './config';
 const PAGE_SIZE = 10;
 
 class FirebaseSale implements SaleRepository {
+  async add(sale: Sale): Promise<Sale> {
+    const saleData = {
+      farm_id: doc(firestore, 'farms', sale.farm.id),
+      status: sale.status,
+      total_value: sale.total_value,
+      items: sale.items.map((item) => ({
+        amount: item.amount,
+        product_id: doc(firestore, 'products', item.product.id),
+        unit_value: item.unit_value,
+        total_value: item.total_value,
+      })),
+      created_at: Timestamp.fromDate(sale.created_at),
+    };
+
+    const docRef = await addDoc(collection(firestore, 'sales'), saleData);
+    sale.id = docRef.id;
+    return sale;
+  }
+
   async getAllPaginated(lastDoc?: DocumentSnapshot): Promise<{
     list: Sale[];
     lastDoc?: DocumentSnapshot;
