@@ -1,16 +1,43 @@
 import { useState } from 'react';
 import { Box, Button, Dialog, Typography } from '@mui/material';
+import { useSaleContext } from '@App/context';
+import { firebaseSale } from '@fb/sale';
+import { firebaseKardex } from '@fb/kardex';
+import CalcelSaleUseCase from '@usecases/sale/cancel';
 import Sale from '@domain/entities/Sale';
+import { toast } from 'react-toastify';
 
 type Props = {
   sale: Sale,
 };
 
 const CancelSaleButton = ({ sale }:Props) => {
-  const [showDialog, setShowDialog] = useState(false);
+  const { dispatch } = useSaleContext();
 
-  const handleCancelSale = () => {
-    console.log('Sale cancelled');
+  const [showDialog, setShowDialog] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleCancelSale = async () => {
+    setLoading(true);
+
+    try {
+      const cancelUseCase = new CalcelSaleUseCase(firebaseSale, firebaseKardex);
+      await cancelUseCase.execute(sale.id);
+
+      dispatch({
+        type: 'CANCEL_SALE',
+        id: sale.id,
+      });
+
+      toast.success('Venda cancelada com sucesso!');
+      setShowDialog(false);
+    } catch (error) {
+      console.log('Error canceling sale:', error);
+      
+      toast.error('Erro ao cancelar a venda. Tente novamente mais tarde.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -48,6 +75,7 @@ const CancelSaleButton = ({ sale }:Props) => {
               color="primary"
               onClick={() => setShowDialog(false)}
               fullWidth
+              disabled={loading}
             >
               Fechar
             </Button>
@@ -56,6 +84,8 @@ const CancelSaleButton = ({ sale }:Props) => {
               color="error"
               onClick={handleCancelSale}
               fullWidth
+              loading={loading}
+              loadingPosition="start"
             >
               Cancelar venda
             </Button>

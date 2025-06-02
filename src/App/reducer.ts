@@ -23,6 +23,15 @@ const reducer = (state: State, action: ActionType):State => {
         list: [action.item, ...state.list],
       };
 
+    case 'CANCEL_SALE': {
+      return {
+        ...state,
+        list: state.list.map((item) => 
+          item.id === action.id ? { ...item, status: 'CANCELLED' } : item,
+        ),
+      };
+    };
+
     default:
       throw new Error('Unhandled action');
   }

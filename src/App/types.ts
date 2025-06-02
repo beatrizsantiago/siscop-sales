@@ -10,7 +10,8 @@ export type State = {
 
 export type ActionType = { type: 'SET_SALES', list: Sale[], lastDoc?: DocumentSnapshot | null, hasMore: boolean }
 | { type: 'SET_LOADING', loading: boolean }
-| { type: 'ADD_SALE', item: Sale };
+| { type: 'ADD_SALE', item: Sale }
+| { type: 'CANCEL_SALE', id: string };
 
 export type SaleProviderType = {
   state: State,

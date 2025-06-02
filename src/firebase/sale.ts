@@ -2,6 +2,7 @@ import { SaleRepository } from '@domain/repositories/SaleRepository';
 import {
   addDoc, collection, doc, DocumentReference, DocumentSnapshot,
   getDoc, getDocs, limit, orderBy, query, startAfter,  Timestamp,
+  updateDoc,
 } from 'firebase/firestore';
 import Sale from '@domain/entities/Sale';
 import Product from '@domain/entities/Product';
@@ -119,6 +120,17 @@ class FirebaseSale implements SaleRepository {
       hasMore: snapshot.docs.length === PAGE_SIZE,
     };
   };
+
+  async findById(id: string): Promise<any> {
+    const ref = doc(firestore, 'sales', id);
+    const snap = await getDoc(ref);
+    return snap.data();
+  }
+
+  async updateStatus(id: string, status: string): Promise<void> {
+    const ref = doc(firestore, 'sales', id);
+    await updateDoc(ref, { status });
+  }
 };
 
 export const firebaseSale = new FirebaseSale();

@@ -8,4 +8,6 @@ export interface SaleRepository {
     lastDoc?: DocumentSnapshot;
     hasMore: boolean;
   }>;
+  findById(id: string): Promise<any>;
+  updateStatus(id: string, status: string): Promise<void>;
 };

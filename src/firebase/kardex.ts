@@ -56,6 +56,29 @@ export class FirebaseKardex implements KardexRepository {
 
     await batch.commit();
   };
+
+  async restoreStock(farmId: string, productId: string, amount: number): Promise<void> {
+    const farmRef = doc(firestore, 'farms', farmId);
+    const productRef = doc(firestore, 'products', productId);
+
+    const q = query(
+      collection(firestore, 'kardex'),
+      where('farm_id', '==', farmRef),
+      where('product_id', '==', productRef),
+      where('state', '==', 'READY')
+    );
+
+    const snapshot = await getDocs(q);
+    const batch = writeBatch(firestore);
+
+    const firstDoc = snapshot.docs[0];
+    const current = firstDoc.data().amount || 0;
+    batch.update(doc(firestore, 'kardex', firstDoc.id), {
+      amount: current + amount
+    });
+
+    await batch.commit();
+  }
 };
 
 export const firebaseKardex = new FirebaseKardex();
