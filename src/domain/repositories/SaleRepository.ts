@@ -10,4 +10,5 @@ export interface SaleRepository {
   }>;
   findById(id: string): Promise<any>;
   updateStatus(id: string, status: string): Promise<void>;
+  findAll(): Promise<Sale[]>;
 };

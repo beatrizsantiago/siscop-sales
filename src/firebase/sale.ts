@@ -30,7 +30,7 @@ class FirebaseSale implements SaleRepository {
     const docRef = await addDoc(collection(firestore, 'sales'), saleData);
     sale.id = docRef.id;
     return sale;
-  }
+  };
 
   async getAllPaginated(lastDoc?: DocumentSnapshot): Promise<{
     list: Sale[];
@@ -125,11 +125,58 @@ class FirebaseSale implements SaleRepository {
     const ref = doc(firestore, 'sales', id);
     const snap = await getDoc(ref);
     return snap.data();
-  }
+  };
 
   async updateStatus(id: string, status: string): Promise<void> {
     const ref = doc(firestore, 'sales', id);
     await updateDoc(ref, { status });
+  };
+
+  async findAll(): Promise<Sale[]> {
+    const snapshot = await getDocs(collection(firestore, 'sales'));
+
+    return await Promise.all(snapshot.docs.map(async doc => {
+      const data = doc.data();
+      const farmRef = data.farm_id as DocumentReference;
+      const farmSnap = await getDoc(farmRef);
+      const farmData = farmSnap.data();
+
+      const farm = new Farm(
+        farmRef.id,
+        farmData?.name,
+        farmData?.geolocation,
+        [],
+      );
+
+      const items = await Promise.all(data.items.map(async (item: any) => {
+        const productRef = item.product_id as DocumentReference;
+        const productSnap = await getDoc(productRef);
+        const productData = productSnap.data();
+
+        const product = new Product(
+          productRef.id,
+          productData?.name,
+          productData?.unit_value,
+          productData?.cycle_days
+        );
+
+        return {
+          amount: item.amount,
+          total_value: item.total_value,
+          unit_value: item.unit_value,
+          product,
+        };
+      }));
+
+      return new Sale(
+        doc.id,
+        farm,
+        data.status,
+        data.total_value,
+        items,
+        data.created_at.toDate()
+      );
+    }));
   }
 };
 
