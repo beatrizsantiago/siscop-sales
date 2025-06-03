@@ -12,7 +12,7 @@ type Props = {
 };
 
 const CancelSaleButton = ({ sale }:Props) => {
-  const { dispatch } = useSaleContext();
+  const { dispatch, getProductProfit, getFarmsProfit } = useSaleContext();
 
   const [showDialog, setShowDialog] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -30,6 +30,8 @@ const CancelSaleButton = ({ sale }:Props) => {
       });
 
       toast.success('Venda cancelada com sucesso!');
+      getProductProfit();
+      getFarmsProfit();
       setShowDialog(false);
     } catch (error) {
       console.log('Error canceling sale:', error);

@@ -32,6 +32,18 @@ const reducer = (state: State, action: ActionType):State => {
       };
     };
 
+    case 'SET_PRODUCT_PROFIT':
+      return {
+        ...state,
+        productProfit: action.data,
+      };
+
+    case 'SET_FARMS_PROFIT':
+      return {
+        ...state,
+        farmsProfit: action.data,
+      };
+
     default:
       throw new Error('Unhandled action');
   }

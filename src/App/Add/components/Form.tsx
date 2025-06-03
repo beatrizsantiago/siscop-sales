@@ -32,7 +32,7 @@ type Props = {
 };
 
 const FormContainer = ({ handleClose }:Props) => {
-  const { dispatch } = useSaleContext();
+  const { dispatch, getProductProfit, getFarmsProfit } = useSaleContext();
 
   const { farms, loading: farmsLoading } = useGetFarms();
 
@@ -70,6 +70,8 @@ const FormContainer = ({ handleClose }:Props) => {
       toast.success('Venda realizada com sucesso!');
       setItemsList([NEW_ITEM]);
       setSelectedFarm(null);
+      getProductProfit();
+      getFarmsProfit();
       handleClose();
     } catch (error: any) {
       if ('message' in error && typeof error.message === 'string' && error.message.includes('INSUFFICIENT_STOCK')) {
