@@ -33,6 +33,7 @@
       "@fb/*": ["./src/firebase/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@components/*": ["./src/components/*"],
+      "@generalTypes/*": ["./src/types/*"],
     }
   },
   "include": ["src"]

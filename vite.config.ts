@@ -27,6 +27,7 @@ export default defineConfig({
       '@fb': path.resolve(__dirname, 'src/firebase'),
       '@hooks': path.resolve(__dirname, 'src/hooks'),
       '@components': path.resolve(__dirname, 'src/components'),
+      '@generalTypes': path.resolve(__dirname, 'src/types'),
     },
   },
   optimizeDeps: {
