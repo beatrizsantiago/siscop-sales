@@ -17,6 +17,7 @@
 - [react-toastify](https://fkhadra.github.io/react-toastify/introduction/) — sistema de notificações e alertas;
 - [@module-federation/vite](https://github.com/module-federation/vite) — integração de Module Federation para arquitetura de microfrontends.
 - [date-fns](https://date-fns.org/) — para lidar com datas;
+- [chart.js](https://www.chartjs.org/) - para os gráficos;
 - [Jest](https://jestjs.io/) — framework de testes para JavaScript, utilizado para os testes unitários e de integração;
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) — utilizada para testes de componentes React com foco na experiência do usuário.
 
