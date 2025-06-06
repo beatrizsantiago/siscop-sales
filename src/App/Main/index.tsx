@@ -6,7 +6,7 @@ import FarmsProfitChart from '@App/FarmsProfitChart';
 
 const Main = () => (
   <Box padding={2}>
-    <Box display="flex" gap={3}>
+    <Box display="flex" gap={3} flexWrap={{ xs: "wrap", md: 'nowrap' }}>
       <ProductProfitChart />
       <FarmsProfitChart />
     </Box>
