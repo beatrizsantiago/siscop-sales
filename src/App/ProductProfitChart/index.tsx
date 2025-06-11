@@ -3,16 +3,14 @@ import {
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { useSaleContext } from '@App/context';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const ProductProfitChart = () => {
   const { state } = useSaleContext();
 
-  if (state.productProfit.length === 0) {
-    return <CircularProgress />;
-  };
+  if (state.productProfit.length === 0) return null;
 
   return (
     <Box
