@@ -16,12 +16,6 @@ import CurrencyField from '@components/CurrencyField';
 import Farm from '@domain/entities/Farm';
 import Product from '@domain/entities/Product';
 
-const NEW_ITEM = {
-  amount: 0,
-  product: null,
-  unit_value: 0,
-};
-
 type ItemType = {
   amount: number;
   product: Product | null
@@ -38,7 +32,20 @@ const FormContainer = ({ handleClose }:Props) => {
 
   const [loading, setLoading] = useState(false);
   const [selectedFarm, setSelectedFarm] = useState<Farm | null>(null);
-  const [itemsList, setItemsList] = useState<ItemType[]>([NEW_ITEM]);
+  const [itemsList, setItemsList] = useState<ItemType[]>([{
+    amount: 0,
+    product: null,
+    unit_value: 0,
+  }]);
+
+  const clearData = () => {
+    setItemsList([{
+      amount: 0,
+      product: null,
+      unit_value: 0,
+    }]);
+    setSelectedFarm(null);
+  };
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -68,8 +75,7 @@ const FormContainer = ({ handleClose }:Props) => {
       });
 
       toast.success('Venda realizada com sucesso!');
-      setItemsList([NEW_ITEM]);
-      setSelectedFarm(null);
+      clearData();
       getProductProfit();
       getFarmsProfit();
       handleClose();
@@ -90,7 +96,11 @@ const FormContainer = ({ handleClose }:Props) => {
     const updatedItemsList = [...itemsList];
 
     if (!product) {
-      updatedItemsList[index] = NEW_ITEM;
+      updatedItemsList[index] = {
+        amount: 0,
+        product: null,
+        unit_value: 0,
+      };
       setItemsList(updatedItemsList);
       return;
     }
@@ -117,13 +127,22 @@ const FormContainer = ({ handleClose }:Props) => {
   const onAddItemClick = () => {
     setItemsList([
       ...itemsList,
-      NEW_ITEM,
+      {
+        amount: 0,
+        product: null,
+        unit_value: 0,
+      },
     ]);
   };
 
   const onDeleteItemClick = (index: number) => {
     const updatedItemsList = itemsList.filter((_, i) => i !== index);
     setItemsList(updatedItemsList);
+  };
+
+  const onCancelClick = () => {
+    clearData();
+    handleClose();
   };
 
   if (farmsLoading) return <CircularProgress />;
@@ -227,7 +246,7 @@ const FormContainer = ({ handleClose }:Props) => {
       </Grid>
 
       <Box marginTop={4} display="flex" justifyContent="space-between">
-        <Button onClick={handleClose} variant="outlined" color="error">
+        <Button onClick={onCancelClick} variant="outlined" color="error">
           Cancelar
         </Button>
         <Button
