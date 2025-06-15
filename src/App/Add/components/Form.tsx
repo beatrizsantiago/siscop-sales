@@ -180,7 +180,7 @@ const FormContainer = ({ handleClose }:Props) => {
           <>
             {itemsList.map((item, index) => (
               <React.Fragment key={index}>
-                <Grid size={5}>
+                <Grid size={{ xs: 12, md: 5}}>
                   <Autocomplete
                     options={availableProductsList}
                     renderInput={(params) => <TextField {...params} label="Selecione o produto" variant="standard" required />}
@@ -190,7 +190,7 @@ const FormContainer = ({ handleClose }:Props) => {
                     isOptionEqualToValue={(option, value) => option.id === value.id}
                   />
                 </Grid>
-                <Grid size={3}>
+                <Grid size={{ xs: 6, md: 3}}>
                   <TextField
                     label="Quantidade"
                     variant="standard"
@@ -201,7 +201,7 @@ const FormContainer = ({ handleClose }:Props) => {
                     required
                   />
                 </Grid>
-                <Grid size={3}>
+                <Grid size={{ xs: 6, md: 3}}>
                   <CurrencyField
                     label="Valor unitário"
                     variant="standard"
@@ -211,8 +211,18 @@ const FormContainer = ({ handleClose }:Props) => {
                     required
                   />
                 </Grid>
-                <Grid size={1}>
-                  <Box display="flex" alignItems="flex-end" justifyContent="center" height="100%">
+                <Grid size={{ xs: 12, md: 1 }}>
+                  <Box display={{ xs: 'flex', md: 'none' }} justifyContent="center">
+                    <Button
+                      color="error"
+                      onClick={() => onDeleteItemClick(index)}
+                      disabled={itemsList.length <= 1}
+                      variant="outlined"
+                    >
+                      Excluir item
+                    </Button>
+                  </Box>
+                  <Box display={{ xs: 'none', md: 'flex' }} alignItems="flex-end" justifyContent="center" height="100%">
                     <IconButton
                       sx={{ color: 'error.main' }}
                       onClick={() => onDeleteItemClick(index)}
