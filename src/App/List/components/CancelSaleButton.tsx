@@ -33,9 +33,7 @@ const CancelSaleButton = ({ sale }:Props) => {
       getProductProfit();
       getFarmsProfit();
       setShowDialog(false);
-    } catch (error) {
-      console.log('Error canceling sale:', error);
-      
+    } catch {
       toast.error('Erro ao cancelar a venda. Tente novamente mais tarde.');
     } finally {
       setLoading(false);
