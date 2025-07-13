@@ -22,7 +22,9 @@ export default defineConfig({
     }),
   ],
   server: {
+    host: "0.0.0.0",
     port: 3004,
+    cors: true
   },
   resolve: {
     alias: {
@@ -39,4 +41,15 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['@phosphor-icons/react'],
   },
+  build: {
+    target: 'esnext',
+  },
+  preview: {
+    host: "0.0.0.0",
+    port: 3004,
+    strictPort: true,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  }
 })
