@@ -16,8 +16,17 @@ describe('AddSaleUseCase', () => {
     add: jest.fn(),
   };
 
+  const mockGoalRepository = {
+    findPendingSalesGoals: jest.fn().mockResolvedValue([]),
+    markAsFinished: jest.fn(),
+  };
+
+  const mockNotificationRepository = {
+    create: jest.fn(),
+  };
+
   const makeSut = () => {
-    return new AddSaleUseCase(mockSaleRepository, mockKardexRepository);
+    return new AddSaleUseCase(mockSaleRepository, mockKardexRepository, mockGoalRepository, mockNotificationRepository);
   };
 
   beforeEach(() => {

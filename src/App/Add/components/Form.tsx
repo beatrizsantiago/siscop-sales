@@ -10,6 +10,8 @@ import { TrashIcon } from '@phosphor-icons/react';
 import { money, parseStringNumberToFloat } from '@utils/currencyFormats';
 import { firebaseSale } from '@fb/sale';
 import { firebaseKardex } from '@fb/kardex';
+import { firebaseGoal } from '@fb/goal';
+import { firebaseNotification } from '@fb/notification';
 import AddSaleUseCase from '@usecases/sale/add';
 import useGetFarms from '@hooks/useGetFarms';
 import CurrencyField from '@components/CurrencyField';
@@ -58,7 +60,7 @@ const FormContainer = ({ handleClose }:Props) => {
     setLoading(true);
 
     try {
-      const addUseCase = new AddSaleUseCase(firebaseSale, firebaseKardex);
+      const addUseCase = new AddSaleUseCase(firebaseSale, firebaseKardex, firebaseGoal, firebaseNotification);
       const response = await addUseCase.execute({
         items: itemsList
           .map((item) => ({
@@ -87,6 +89,7 @@ const FormContainer = ({ handleClose }:Props) => {
       }
       
       toast.error('Erro ao realizar a venda. Tente novamente mais tarde.');
+      console.error('Error adding sale:', error);
     } finally {
       setLoading(false);
     }

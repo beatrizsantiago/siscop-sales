@@ -1,8 +1,11 @@
 import Farm from '@domain/entities/Farm';
 import Product from '@domain/entities/Product';
 import Sale from '@domain/entities/Sale';
+import Notification from '@domain/entities/Notification';
 import { SaleRepository } from '@domain/repositories/SaleRepository';
 import { KardexRepository } from '@domain/repositories/KardexRepository';
+import { GoalRepository } from '@domain/repositories/GoalRepository';
+import { NotificationRepository } from '@domain/repositories/NotificationRepository';
 
 type AddParams = {
   farm: Farm,
@@ -16,7 +19,9 @@ type AddParams = {
 class AddSaleUseCase {
   constructor(
     private saleRepository: SaleRepository,
-    private kardexRepository: KardexRepository
+    private kardexRepository: KardexRepository,
+    private goalRepository: GoalRepository,
+    private notificationRepository: NotificationRepository,
   ) {}
 
   async execute(params: AddParams) {
@@ -46,6 +51,41 @@ class AddSaleUseCase {
     for (const item of params.items) {
       await this.kardexRepository.consumeStock(params.farm.id, item.product.id, item.amount);
     }
+
+    const pendingGoals = await this.goalRepository.findPendingSalesGoals(
+      savedSale.farm.id,
+      new Date()
+    );
+
+    for (const goal of pendingGoals) {
+      let allItemsMet = true;
+
+      for (const goalItem of goal.items) {
+        const totalSold = await this.saleRepository.sumAmountSince(
+          savedSale.farm.id,
+          goalItem.product_id,
+          goal.created_at
+        );
+
+        if (totalSold < goalItem.amount) {
+          allItemsMet = false;
+          break;
+        }
+      }
+
+      if (allItemsMet) {
+        await this.goalRepository.markAsFinished(goal.id);
+
+        await this.notificationRepository.create(
+          new Notification(
+            '',
+            'SALE',
+            savedSale.farm.name,
+            new Date()
+          )
+        );
+      };
+    };
 
     return savedSale;
   }

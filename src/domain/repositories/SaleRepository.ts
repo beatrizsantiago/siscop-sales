@@ -1,4 +1,4 @@
-import { DocumentSnapshot } from 'firebase/firestore';
+import { DocumentReference, DocumentSnapshot, Timestamp } from 'firebase/firestore';
 import Sale from '@domain/entities/Sale';
 
 export interface SaleRepository {
@@ -11,4 +11,5 @@ export interface SaleRepository {
   findById(id: string): Promise<any>;
   updateStatus(id: string, status: string): Promise<void>;
   findAll(): Promise<Sale[]>;
+  sumAmountSince(farmId: string, productId: DocumentReference, since: Timestamp): Promise<number>;
 };
